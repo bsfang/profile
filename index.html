@@ -18,12 +18,55 @@
     </head>
     <body>
         <div id="header"></div><script id="header">$("div#header").html(__header_html);</script>
+        <!--         
+        <div id="header">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">TDR Correction by Machine Learning</a>
+                </div>
+            </nav>
+        </div> -->
         <div class="content m-5">
             <!--Content START ============================================================ -->
-            <h2>TDR Correction by Machine Learning</h2>
             <div class="content m-3">
-                <h4>The Problem</h4>
-                <p>This is content</p>
+                <h1>Issue Overview</h1>
+                <h4>TDR Setup in PCB Manufacturing</h4>
+                <p>
+                    Time Domain Reflectometry (TDR) is widely used in substrate and PCB manufacturing to control the impedance of transmission lines. 
+                    Figure 1 illustrates a typical test setup for measuring differential transmission lines on a substrate or PCB, where the device under test (DUT) is accessed using PCB probes. These probes convert the coaxial test interface into a coplanar structure suitable for the DUT. Due to environmental limitations that prevent positioning the TDR equipment close to the DUT, long cables are used to extend the connection. Before testing, the TDR is typically calibrated with a 50-ohm standard to eliminate reflections. However, this calibration does not account for signal loss caused by the cables.
+                </p>
+                <br>
+                <h4>Measurement Error</h4>
+                <p>
+                    The measurement error introduced by the cable becomes significant when the impedance of the Device Under Test (DUT) deviates substantially from the system impedance—typically 50 Ω for single-ended or 100 Ω for differential signals. This occurs because the reflected energy from the DUT is attenuated as it travels back through the cable. As a result, the magnitude of the reflection appears smaller, causing the measured impedance to be falsely interpreted as being closer to the system impedance. This leads to an increase in measurement error. Figure 2 illustrates this effect: it shows a 50 Ω differential transmission line, verified using a fully calibrated VNA with SOLT calibration. However, the Time Domain Reflectometry (TDR) measurement shows a 20% error due to this cable-induced reflection loss.
+                </p>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3" id="fig1" style="max-height: 500px; object-fit: contain;">
+                        <img src="img/fig1.png" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-sm-6 mb-3" id="fig2" style="max-height: 500px; object-fit: contain;">
+                        <img src="img/fig2.png" class="card-img-top" alt="...">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3" id="fig1_exp">
+                        <h5>Figure 1</h5>
+                    </div>
+                    <div class="col-sm-6 mb-3" id="fig2_exp">
+                        <h5>Figure 2</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content m-3">
+                <h1>The Correction</h1>
+                <h4>The Correction Method</h4>
+                <p>
+                    By using 
+                </p>
+
             </div>
             <!--Content END ============================================================== -->
         </div>
