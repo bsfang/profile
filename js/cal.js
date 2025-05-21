@@ -1,4 +1,4 @@
-var correct = function(z,T1GHz,T20GHz,Z0){
+var correct_z = function(z,T1GHz,T20GHz,Z0){
     if(Z0==undefined){
         Z0 = 50;
     }
@@ -32,14 +32,10 @@ var cable_s21 = function(T1GHz, T20GHz){
     let c2 = L*(1-Math.sqrt(20)*r)/(20-Math.sqrt(20));
 
     let T = {x:[],y:[]};
-    let f_min = 10E6;
-    let f_max = 40E9;
-    let n_point = 201;
-    let f_step = (f_max - f_min)/(n_point-1);
-    for(let i=0; i<f_step; i++){
-        let freq = f_min+f_step*i;
+    for(let i=1; i<4001; i++){
+        let freq = i*0.01;
         T.x.push(freq);
-        T.y.push(c1*Math.sqrt(freq)+c2*freq);
+        T.y.push(-(c1*Math.sqrt(freq)+c2*freq));
     }
     return T;
 }
