@@ -18,14 +18,6 @@
     </head>
     <body>
         <div id="header"></div><script id="header">$("div#header").html(__header_html);</script>
-        <!--         
-        <div id="header">
-            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">TDR Correction by Machine Learning</a>
-                </div>
-            </nav>
-        </div> -->
         <div class="content m-5">
             <!--Content START ============================================================ -->
             <div class="content m-3">
@@ -46,21 +38,25 @@
                 <p>Another concept is to use machine learning methods to predict the actual impedance based on cable characterization. Details about the method can be found in the <a href="https://ieeexplore.ieee.org/document/8811021">papaer</a></p>
                 <p>Here is a <a href="cal.html">calculator</a> created using the extracted machine learning model for you to try.</p>
                 <br>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-sm-6 mb-3" id="fig1_exp">
                         <h5>Figure 1: An example of test setup.</h5>
                     </div>
                     <div class="col-sm-6 mb-3" id="fig2_exp">
                         <h5>Figure 2: An example of measurement error.</h5>
                     </div>
-                </div>
+                </div> -->
                 <div class="row">
-                    <div class="col-sm-6 mb-3" id="fig1" style="max-height: 500px; object-fit: contain;">
+                    <div class="col-sm-5 mb-5" id="fig1" style="max-height: 500px; object-fit: contain;">
+                        <h5>Figure 1: An example of test setup.</h5>
                         <img src="img/fig1.png" class="card-img-top" alt="...">
                     </div>
-                    <div class="col-sm-6 mb-3" id="fig2" style="max-height: 500px; object-fit: contain;">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-5 mb-5" id="fig2" style="max-height: 500px; object-fit: contain;">
+                        <h5>Figure 2: An example of measurement error.</h5>
                         <img src="img/fig2.png" class="card-img-top" alt="...">
                     </div>
+                    <div class="col-sm-1"></div>
                 </div>
             </div>
             <!--Content END ============================================================== -->
