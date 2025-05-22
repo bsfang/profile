@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>TDR Correction</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <script src="js/header_v1.js"></script>
+    <script src="js/page_display_v1.js"></script>
+    <script src="js/pages/tdr_cal.js"></script>
+    
+    <style>
+        .fakeimg {
+            height: 200px;
+            background: #aaa;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="header"></div><script id="header">$("div#header").html(__header_html);</script>
+        <div id="alert"></div>
+        <div class="content m-5">
+            <h1>TDR Correction by Machine Learning</h1>
+            <ul class="nav nav-tabs" id="worksheets">
+                <li class="nav-item" id="p1"><a class="nav-link" href="#">Introduction</a></li>
+                <li class="nav-item" id="p2"><a class="nav-link active" aria-current="page" href="#">Calculator</a></li>
+            </ul>
+
+            <div class="worksheet m-5" id="p1">
+                <h1>Introduction</h1>
+                <h4>Background: TDR Setup in PCB Manufacturing</h4>
+                <p>
+                    Time Domain Reflectometry (TDR) is widely used in substrate and PCB manufacturing to control the impedance of transmission lines. 
+                    Figure 1 illustrates a typical test setup for measuring differential transmission lines on a substrate or PCB, where the device under test (DUT) is accessed using PCB probes. These probes convert the coaxial test interface into a coplanar structure suitable for the DUT. Due to environmental limitations that prevent positioning the TDR equipment close to the DUT, long cables are used to extend the connection. Before testing, the TDR is typically calibrated with a 50-ohm standard to eliminate reflections. However, this calibration does not account for signal loss caused by the cables.
+                </p>
+                <br>
+                <h4>Issue Overview</h4>
+                <p>
+                    The measurement error introduced by the cable becomes significant when the impedance of the DUT deviates substantially from the system impedance—typically 50 Ω for single-ended or 100 Ω for differential signals. This occurs because the reflected energy from the DUT is attenuated as it travels back through the cable. As a result, the magnitude of the reflection appears smaller, causing the measured impedance to be falsely interpreted as being closer to the system impedance. This leads to an increase in measurement error. Figure 2 illustrates this effect: it shows a 50 Ω differential transmission line, verified using a fully calibrated VNA with SOLT calibration. However, the Time Domain Reflectometry (TDR) measurement shows a 20% error due to this cable-induced reflection loss.
+                </p>
+                <br>
+                <h4>The Correction Method</h4>
+                <p>To accurately account for the effects of the cable and test fixture, an open-short-load (SOL) calibration using a VNA or TDR can be performed. However, due to the high cost of these instruments, this approach is not considered feasible.</p>
+                <p>Another concept is to use machine learning methods to predict the actual impedance based on cable characterization. Details about the method can be found in the <a href="https://ieeexplore.ieee.org/document/8811021">papaer</a></p>
+                <p>Here is a <a href="#" onclick="show_worksheet('p2')">calculator</a> created using the extracted machine learning model for you to try.</p>
+                <br>
+                <div class="row">
+                    <div class="col-sm-5 mb-5" id="fig1" style="max-height: 500px; object-fit: contain;">
+                        <h5>Figure 1: An example of test setup.</h5>
+                        <img src="img/fig1.png" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-5 mb-5" id="fig2" style="max-height: 500px; object-fit: contain;">
+                        <h5>Figure 2: An example of measurement error.</h5>
+                        <img src="img/fig2.png" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+            </div>
+
+            <div class="worksheet m-5" id="p2">
+                <h1>Calculator</h1>
+                <p>The calculator corrects TDR measurements using a machine learning model that takes into account features such as cable loss and impedance. For more details, please refer to the <a href="#" onclick="show_worksheet('p1')">link</a>.</p>
+                <div class="content m-3">
+                    <h3>Cable Characterization</h3>
+                    <p>The cable was used to connect instrument and the probe.</p>
+                    <div class="input-group">
+                        <span class="input-group-text" style="width:300px;">Cable Loss at  1 GHz</span>
+                        <input class="form-control" type="number" value="0.860" id="t1ghz" onchange="do_cal()">
+                        <span class="input-group-text" style="width:50px;">dB</span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" style="width:300px;">Cable Loss at 20 GHz</span>
+                        <input class="form-control" type="number" value="4.138" id="t20ghz" onchange="do_cal()">
+                        <span class="input-group-text" style="width:50px;">dB</span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text" style="width:300px;">Characterization Impedance</span>
+                        <input class="form-control" type="number" value="50" id="z0" onchange="do_cal()">
+                        <span class="input-group-text" style="width:50px;">Ω</span>
+                    </div>
+                </div>
+
+                <div class="content m-3">
+                    <h3>TDR Measurement of Impedance</h3>
+                    <p>Each port of the TDR should be calibrated using a 50Ω terminator prior to measurement.</p>
+                    <div class="input-group">
+                        <span class="input-group-text" style="width:300px;">DUT Type</span>
+                        <select class="form-select" id="dut_mode" onchange="do_cal()">
+                            <option value="1">Differential</option>
+                            <option value="2">Single-End</option>
+                        </select>
+
+                        <span class="input-group-text" style="width:300px;">TDR Measurement</span>
+                        <input class="form-control" type="number" value="60.7" id="zm" onchange="do_cal()">
+                        <span class="input-group-text" style="width:50px;">Ω</span>
+                    </div>
+                </div>
+
+                <div class="content m-3">
+                    <h3>Correction Result</h3>
+                    <div class="input-group">
+                        <span class="input-group-text" style="width:300px;">Correlated Impedance</span>
+                        <input class="form-control" type="number" value="75" disabled id="corrected_z">
+                        <span class="input-group-text" style="width:50px;">Ω</span>
+                    </div>
+                </div>
+
+                <div class="content m-3 row">
+                    <div class="col-sm-6">
+                        <div id="cable_plot" style="width:100%;max-width: 800px;"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="z_plot" style="width:100%;max-width: 800px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        show_worksheet("p2");
+    </script>
+    <script>
+        var get_input = function(){
+            // get value
+            let t1ghz = parseFloat($('input#t1ghz').val());
+            let t20ghz = parseFloat($('input#t20ghz').val());
+            let z0 = parseFloat($('input#z0').val());
+            let dut_mode = parseFloat($('select#dut_mode').val());
+            let tdr_z = parseFloat($('input#zm').val());
+
+            // check validation
+            if(isNaN(t1ghz)){
+                show_alert('Insertion Loss at 1GHz should be a number.');
+                return;
+            }
+            if(isNaN(t20ghz)){
+                show_alert('Insertion Loss at 20GHz should be a number.');
+                return;
+            }
+            if(isNaN(z0)||(z0>53)||(z0<47)){
+                show_alert('Characterization impedance of the cable should be a number in between 47 to 53 Ω.');
+                return;
+            }
+            if(t1ghz<=0){
+                show_alert('Insertion Loss at 1GHz should be a positive non-zero number.');
+                return;
+            }
+            //if(((t1ghz/t20ghz)>0.3)||((t1ghz/t20ghz)<0.1)){
+            if(t1ghz>t20ghz){
+                show_alert('The cable is exhibiting abnormal behavior. Please replace it with a known good cable.');
+                return;
+            }
+            if(t20ghz>5){
+                show_alert('Insertion Loss of the cable is too high (>5dB @20GHz), please try to use a shorter cable.');
+                return;
+            }
+            if(isNaN(tdr_z)){
+                show_alert('TDR Measurement should be a number');
+                return;
+            }
+            if(tdr_z>(300/dut_mode)||tdr_z<(25/dut_mode)){
+                show_alert("The TDR measurement falls outside the regression model's valid range (25–300 Ω for differential, 12.5–150 Ω for single-ended)");
+                return;
+            }
+
+            // set output
+            return {
+                t1ghz: t1ghz,
+                t20ghz: t20ghz,
+                z0:z0,
+                dut_mode:dut_mode,
+                tdr_z:tdr_z
+            };
+        };
+    </script>
+    <script>
+        var plot_cable_loss = function(){
+            let data = get_input();
+            if(data==undefined){
+                return;
+            }
+            plt_data = cable_s21(data.t1ghz,data.t20ghz);
+            let trace = [{
+                x: plt_data.x,
+                y: plt_data.y,
+                mode: 'lines',
+            }];
+            let layout = {
+                title: 'Characterization of Cable',
+                xaxis: { title: 'Frequency (GHz)' },
+                yaxis: { title: 'S21(dB)' }
+            };
+            Plotly.newPlot('cable_plot', trace, layout);
+            return true;
+        };
+
+        var plot_z = function(){
+            let data = get_input();
+            if(data==undefined){
+                return;
+            }
+
+            let trace_x = [];
+            let trace_y = [];
+            for(let i=25/data.dut_mode; i<300/data.dut_mode; i++){
+                trace_x.push(i);
+                trace_y.push(correct_z(i*data.dut_mode,data.t1ghz,data.t20ghz,data.z0)/data.dut_mode);
+            }
+            let trace = [
+                {
+                    x: [25/data.dut_mode,300/data.dut_mode],
+                    y: [25/data.dut_mode,300/data.dut_mode],
+                    mode: 'lines',
+                    name: 'Ideal',
+                    line:{color:'gray'}
+                },
+                {
+                    x: trace_x,
+                    y: trace_y,
+                    mode: 'lines',
+                    name: 'Prediction',
+                    line:{color:'blue'}
+                },
+                {
+                    x:[data.tdr_z],
+                    y:[correct_z(data.tdr_z*data.dut_mode,data.t1ghz,data.t20ghz,data.z0)/data.dut_mode],
+                    mode: 'markers',
+                    name: 'TDR Measurement',
+                    line:{color:'red',size:2}
+                }
+            ];
+
+            let layout = {
+                title: 'Correction Result',
+                xaxis: { title: 'TDR measurement(Ω)' },
+                yaxis: { title: 'Corrected Impedance(Ω)' }
+            };
+            Plotly.newPlot('z_plot', trace, layout);
+        }
+    </script>
+    <script>
+        var do_cal = function(){
+            let data = get_input();
+            if(data==undefined){
+                return;
+            }
+            if(plot_cable_loss()){
+                plot_z();
+            }
+            $("input#corrected_z").attr('value',correct_z(data.tdr_z*data.dut_mode,data.t1ghz,data.t20ghz,data.z0)/data.dut_mode)
+        };
+        do_cal();
+    </script>
+</html>

@@ -1,10 +1,11 @@
 var __header_html = `
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">TDR Correction by Machine Learning</a>
+        <a class="navbar-brand" href="#">@</a>
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" id="header-nav-js" style="--bs-scroll-height: 100px;">
 `;
+/*
 __header_html +=`
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">Introduction</a>
@@ -13,6 +14,7 @@ __header_html +=`
                     <a class="nav-link" href="cal.html">Calculator</a>
                 </li>
 `;
+*/
 /*
 __header_html +=`
                 <li class="nav-item dropdown">
@@ -26,15 +28,19 @@ __header_html +=`
                 </li>
 `;
 */
-__header_html +=`
-            </ul>
+__header_html+="</ul>";
 
+/*
+__header_html +=`
             <!--
             <li class="d-flex nav-item navbar-nav">
                 <a class="me-2 nav-link" href="#">about Me</a>
             </li>
             -->
-            
+`;
+*/
+
+__header_html +=`
         </div>
     </div>
 </nav>
