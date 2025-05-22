@@ -1,5 +1,6 @@
 # the url
-    - https://bsfang.github.io/tdr_cal/
+    https://bsfang.github.io/web/
     
-# detail
-A correction method of TDR by using machine learning model, presented by HTML &amp; Javascript
+# pages
+    - https://bsfang.github.io/web/tdr_cal.html
+        - A correction method of TDR by using machine learning model, presented by HTML &amp; Javascript
